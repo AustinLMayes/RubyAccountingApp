@@ -1,0 +1,26 @@
+%h1
+  Transaction Log
+  %small All recorded transactions
+%hr
+
+%table
+  %thead
+    %tr
+      %th{:width => "50"} #
+      %th{:width => "250"} Name
+      %th Description
+      %th{:width => "120"} Amount
+      %th{:width => "190"} When
+  %tbody
+    - i = 0
+    - Transaction.order_by(created_at: :desc).all.each do |t|
+      - i = i + 1
+      %tr{style: t.parent_id.nil? ? "" : "background-color: #213060"}
+        %td=i
+        %td= t.name
+        %td= t.description
+        - if t.category.type == "revenue"
+          %td{style: "color: green"}= "+ $" + number_with_precision(t.price / 100.to_f, precision: 2, delimiter: ",")
+        - else
+          %td{style: "color: red"}= "- $" + number_with_precision(t.price / 100.to_f, precision: 2, delimiter: ",")
+        %td=time_ago_in_words(t.created_at) + " ago"

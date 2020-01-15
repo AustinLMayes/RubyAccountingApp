@@ -1,0 +1,33 @@
+%h2
+  Month in Review
+  %small
+    Data for
+    = @start.strftime("%b %d, %Y") + " - " + @end.strftime("%b %d, %Y")
+%hr
+.text-center
+  %h1{style: @made_profit ? "color: green" : "color:red"}
+    Overall
+    = @made_profit ? "Profit" : "Loss"
+  %h3{style: @made_profit ? "color: green" : "color:red"}= "$" + number_with_precision(@profit / 100.to_f, precision: 2, delimiter: ",")
+%hr
+.text-center
+  %h1
+    Revenue
+    %small Organized by Category
+- @revenue.each_slice(6) do |slice|
+  .grid-x.text-center{style: "padding-bottom: 34px"}
+    - slice.each do |t|
+      .cell.large-3{style: t[0] == "Total" ? "background-color: #36023f" : ""}
+        %h3= t[0]
+        %h4= "$" + number_with_precision(t[1] / 100.to_f, precision: 3, delimiter: ",")
+%hr
+.text-center
+  %h1
+    Expenses
+    %small Organized by Category
+- @expenses.each_slice(6) do |slice|
+  .grid-x.text-center{style: "padding-bottom: 34px"}
+    - slice.each do |t|
+      .cell.large-3{style: t[0] == "Total" ? "background-color: #36023f" : ""}
+        %h3= t[0]
+        %h4= "$" + number_with_precision(t[1] / 100.to_f, precision: 3, delimiter: ",")

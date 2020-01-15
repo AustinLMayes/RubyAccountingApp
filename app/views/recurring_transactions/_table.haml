@@ -1,0 +1,55 @@
+%table
+  %thead
+    %tr
+      %th Category
+      %th{:width => "170"} Name
+      %th Description
+      %th{:width => "150"} Interval
+      %th{:width => "200"} When
+      %th{:width => "120"} Amount
+      %th{:width => '160'} Actions
+  %tbody
+    - transactions.each do |t|
+      %tr
+        %td= t.category.name
+        %td= t.name
+        %td= t.description
+        %td= t.describe_interval
+        %td= t.describe_dates
+        %td= "+ $" + number_with_precision(t.price / 100.to_f, precision: 2, delimiter: ",")
+        %td
+          %a{class: 'button warning', style: 'width: 48%','data-toggle': t.id} Edit
+          %a{href: main_app.destroy_recurring_transaction_path(t.id), class: 'button alert', style: 'width: 48%; float: right'} Delete
+      .dropdown-pane.left{id: t.id, 'data-dropdown': "", style: "width: 55%"}
+        = form_for t, url: main_app.update_recurring_transaction_path(t.id) do |f|
+          .grid-container
+            .grid-x
+              .cell.large-3
+                %h4 Name
+                = f.text_field :name, style: 'width: 90%'
+              .cell.large-9
+                %h4 Description
+                = f.text_field :description
+            .grid-x
+              .cell.large-3
+                %h4 Interval Type
+                = f.select :interval_type, RecurringTransaction::INTERVAL_TYPES, {}, {style: 'width: 90%'}
+              .cell.large-4
+                %h4 Interval
+                = f.number_field :interval, {style: 'width: 90%'}
+              .cell.large-4
+                %h4 Category
+                = f.select :category, Category.all.map(&:name), {}, {style: 'width: 90%'}
+            .grid-x
+              .cell.large-3
+                %h4 Price (in cents)
+                = f.number_field :price, style: 'width: 90%'
+              .cell.large-4
+                %h4 Start
+                = f.date_field :start, value: t.start.utc, style: 'width: 90%'
+              .cell.large-4
+                %h4 End
+                = f.date_field :end, value: t.end.utc, style: 'width: 90%'
+              .cell.large-1
+                .text-center
+                  = f.submit "Update", class: "button warning", style: 'margin-top: 42px; width: 100%'

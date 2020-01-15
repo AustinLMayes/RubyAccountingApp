@@ -1,0 +1,53 @@
+%h1
+  Configuration
+  %small Configure various aspects of the panel
+%hr
+%h2
+  Categories
+  %small Categories that transactions are grouped with
+= form_for @new, url: main_app.create_category_path do |f|
+  .grid-x
+    .cell.large-3
+      %h4 Name
+      = f.text_field :name, style: 'width: 90%'
+    .cell.large-6
+      %h4 Description
+      = f.text_field :description, style: 'width: 90%'
+    .cell.large-2
+      %h4 Type
+      = f.select :type, Category::TYPES, {}, {style: 'width: 90%'}
+    .cell.large-1
+      .text-center
+        = f.submit "Create", class: "button success", style: 'margin-top: 42px; width: 100%'
+%table
+  %thead
+    %tr
+      %th{:width => "250"} Name
+      %th Description
+      %th{:width => "150"} Type
+      %th{:width => '160'} Actions
+  %tbody
+    - @categories.each do |c|
+      %tr
+        %td= c.name
+        %td= c.description
+        %td= c.type
+        %td
+          %a{class: 'button warning', style: 'width: 48%','data-toggle': c.id} Edit
+          %a{href: main_app.destroy_category_path + "?id=" + c.id, class: 'button alert', style: 'width: 48%; float: right'} Delete
+      .dropdown-pane.left{id: c.id, 'data-dropdown': ""}
+        = form_for c, url: main_app.update_category_path(c.id) do |f|
+          .grid-container
+            .grid-x
+              .cell.medium-12
+                %h4 Name
+                = f.text_field :name, style: 'width: 90%'
+              .cell.medium-12
+                %h4 Description
+                = f.text_field :description, style: 'width: 90%'
+              .cell.medium-7
+                %h4 Type
+                = f.select :type, Category::TYPES, {}, {style: 'width: 90%'}
+              .cell.medium-5
+                .text-center
+                  = f.submit "Update", class: "button warning", style: 'margin-top: 42px; width: 100%'

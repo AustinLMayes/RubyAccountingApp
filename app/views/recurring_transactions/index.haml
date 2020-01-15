@@ -1,0 +1,53 @@
+.text-center
+  %h2
+    Recurring Transactions
+    %br
+    %small Transactions which happen at a fixed interval between two dates
+%hr
+.text-center
+  %h3
+    Create
+    %small Add a new recurring transaction
+= form_for @new do |f|
+  .grid-x
+    .cell.large-3
+      %h4 Name
+      = f.text_field :name, style: 'width: 90%'
+    .cell.large-9
+      %h4 Description
+      = f.text_field :description
+  .grid-x
+    .cell.large-2
+      %h4 Interval Type
+      = f.select :interval_type, RecurringTransaction::INTERVAL_TYPES, {}, {style: 'width: 90%'}
+    .cell.large-1
+      %h4 Interval
+      = f.number_field :interval, {style: 'width: 90%'}
+    .cell.large-2
+      %h4 Category
+      = f.select :category, Category.all.map(&:name), {}, {style: 'width: 90%'}
+    .cell.large-2
+      %h4 Price (in cents)
+      = f.number_field :price, style: 'width: 90%'
+    .cell.large-2
+      %h4 Start
+      = f.date_field :start, style: 'width: 90%'
+    .cell.large-2
+      %h4 End
+      = f.date_field :end, style: 'width: 90%'
+    .cell.large-1
+      .text-center
+        = f.submit "Create", class: "button success", style: 'margin-top: 42px; width: 100%'
+%hr
+.text-center
+  %h3
+    Active
+    %br
+    %small All currently active recurring transactions
+= render partial: 'recurring_transactions/table', locals: {transactions: @active}
+.text-center
+  %h3
+    Inactive
+    %br
+    %small Recurring transactions which aren't currently in use
+= render partial: 'recurring_transactions/table', locals: {transactions: @inactive}

@@ -1,0 +1,23 @@
+.title-bar{"data-hide-for" => "medium", "data-responsive-toggle" => "responsive-menu"}
+  %button.menu-icon{"data-toggle" => "responsive-menu", :type => "button"}
+  .title-bar-title Menu
+#responsive-menu.top-bar
+  .top-bar-title{style: "width: 3%;padding: 0; margin: 0"}
+    %image{src: "https://docs.stratus.network/img/logo.png"}
+  .top-bar-title
+    Stratus Accounting Dashboard
+  .top-bar-left
+    %ul.menu{"data-dropdown-menu" => ""}
+      %li
+        %a{:href => main_app.root_path} Month in Review
+      %li
+        %a{:href => main_app.log_path} Transaction Log
+      %li
+        %a{:href => recurring_transactions_path} Recurring Transactions
+      %li
+        %a{:href => configuration_path} Configuration
+  .top-bar-right
+    %ul.menu
+      %li
+        Current Balance:
+        = "$" + number_with_precision(@bal / 100.to_f, precision: 2, delimiter: ",")
